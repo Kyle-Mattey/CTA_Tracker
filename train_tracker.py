@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 import logging
 
-# Load environment variables
+# Loads .env variables
 load_dotenv()
 
 # Set up basic logging
@@ -46,6 +46,7 @@ def parse_arrival_data(xml_data):
         destination = eta.find("destNm").text if eta.find("destNm") is not None else "Unknown"
         train_number = eta.find("rn").text if eta.find("rn") is not None else "Unknown"
 
+        # Format the arrival time
         try:
             arrival_time_obj = datetime.strptime(raw_arrival_time, "%Y%m%d %H:%M:%S")
             formatted_arrival_time = arrival_time_obj.strftime("%b %d, %Y - %I:%M %p")
@@ -96,8 +97,8 @@ def push_to_geckoboard_for_line(line, line_name, line_color, arrivals, widget_ke
             html_block += (
                 "<table style='width: 100%; border-collapse: collapse; text-align: left;'>"
                 "<thead><tr>"
-                "<th style='padding: 10px; font-size: 30px;'>Train #</th>"
-                "<th style='padding: 10px; font-size: 30px;'>Arrival Time</th>"
+                "<th style='padding: 10px; font-size: 30px; border-bottom: 2px solid #ddd;'>Train #</th>" 
+                "<th style='padding: 10px; font-size: 30px; border-bottom: 2px solid #ddd;'>Arrival Time</th>"
                 "</tr></thead><tbody>"
                 "<tr><td style='padding: 10px; font-size: 30px;'>No trains</td>"
                 "<td style='padding: 10px; font-size: 30px;'>N/A</td></tr>"
@@ -107,8 +108,8 @@ def push_to_geckoboard_for_line(line, line_name, line_color, arrivals, widget_ke
             html_block += (
                 "<table style='width: 100%; border-collapse: collapse; text-align: left;'>"
                 "<thead><tr>"
-                "<th style='padding: 10px; font-size: 30px;'>Train #</th>"
-                "<th style='padding: 10px; font-size: 30px;'>Arrival Time</th>"
+                "<th style='padding: 10px; font-size: 30px; border-bottom: 2px solid #ddd;'>Train #</th>"
+                "<th style='padding: 10px; font-size: 30px; border-bottom: 2px solid #ddd;'>Arrival Time</th>"
                 "</tr></thead><tbody>"
             )
             for train in arrivals[direction]:
@@ -146,13 +147,13 @@ def main():
     all_arrivals = remove_duplicate_trains(all_arrivals)
 
     brown_arrivals = group_and_sort_arrivals_by_line(all_arrivals, "Brn")
-    push_to_geckoboard_for_line("Brn", "Brown Line", "#63361c", brown_arrivals, BROWN_WIDGET_KEY, ["Kimball", "Loop"])
+    push_to_geckoboard_for_line("Brn", "Brown Line", "#643e1f", brown_arrivals, BROWN_WIDGET_KEY, ["Kimball", "Loop"])
 
     red_arrivals = group_and_sort_arrivals_by_line(all_arrivals, "Red")
-    push_to_geckoboard_for_line("Red", "Red Line", "red", red_arrivals, RED_WIDGET_KEY, ["Howard", "95th/Dan Ryan"])
+    push_to_geckoboard_for_line("Red", "Red Line", "#c60c30", red_arrivals, RED_WIDGET_KEY, ["Howard", "95th/Dan Ryan"])
 
     purple_arrivals = group_and_sort_arrivals_by_line(all_arrivals, "P")
-    push_to_geckoboard_for_line("P", "Purple Line", "purple", purple_arrivals, PURPLE_WIDGET_KEY, ["Linden", "Loop"])
+    push_to_geckoboard_for_line("P", "Purple Line", "#522398", purple_arrivals, PURPLE_WIDGET_KEY, ["Linden", "Loop"])
 
 if __name__ == "__main__":
     main()
